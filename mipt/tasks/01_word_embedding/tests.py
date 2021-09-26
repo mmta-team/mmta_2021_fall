@@ -32,6 +32,12 @@ class TaskTests:
     def from_json(cls, path='test_gt.json'):
         with open(path, 'r') as f:
             gt = json.load(f)
+        
+        gt['scorer'] = {
+            int(key): value 
+            for key, value in gt['scorer'].items()
+        }
+            
         return cls(
             embedding=np.array(gt['embedder']),
             hits=gt['scorer'],
