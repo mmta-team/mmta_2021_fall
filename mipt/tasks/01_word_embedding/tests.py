@@ -55,7 +55,7 @@ class TaskTests:
     def test_scorer(self, hits):
         for k in TaskTests.K_VALUES:
             assert k in hits, 'Hits@{} should be calculated with scorer.'.format(k)
-            assert hits[k] == self._hits[k], 'Hits@{} is incorrect: {} != {}.'.format(k, hits[k], self._hits[k])
+            assert abs(hits[k] - self._hits[k]) < 5e-3, 'Hits@{} is incorrect: {} != {}.'.format(k, hits[k], self._hits[k])
             
     def test_text_preprocessor(self, cls):
         gt = self._processed_text
@@ -65,9 +65,9 @@ class TaskTests:
             min_word_length=3
         )
 
-        result = text_preprocessor('jquery .bind() and/or .ready() not working') == gt
+        result = text_preprocessor('jquery .bind() and/or .ready() not working')
 
-        assert result, '{} != {}'.format(result, gt)
+        assert result == gt, '{} != {}'.format(result, gt)
         
     def test_trigram_tokenizer(self, cls):
         gt = ['#ар', 'арб', 'рбу', 'буз', 'уз#']
@@ -84,7 +84,7 @@ class TaskTests:
 
         gt_trigrams = tri_tokenizer(word)
 
-        assert gt_trigrams == trigrams, 'Trigrams for word "{}" are incorrect: {} != {}'.format(trigrams, gt_trigrams)
+        assert gt_trigrams == trigrams, 'Trigrams for word "{}" are incorrect: {} != {}'.format(word, trigrams, gt_trigrams)
         
     def test_dataloader(self, dataset, collate_fn, embedding_dim):
         dl = DataLoader(dataset, batch_size=TaskTests.BATCH_SIZE, shuffle=True, collate_fn=collate_fn)

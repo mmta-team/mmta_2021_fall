@@ -55,7 +55,7 @@ class TaskTests:
     def test_scorer(self, hits):
         for k in TaskTests.K_VALUES:
             assert k in hits, 'Hits@{} should be calculated with scorer.'.format(k)
-            assert hits[k] == self._hits[k], 'Hits@{} is incorrect: {} != {}.'.format(k, hits[k], self._hits[k])
+            assert abs(hits[k] - self._hits[k]) < 5e-3, 'Hits@{} is incorrect: {} != {}.'.format(k, hits[k], self._hits[k])
             
     def test_text_preprocessor(self, cls):
         gt = self._processed_text
