@@ -62,6 +62,9 @@ def tqdm_notebook_failsafe(*args, **kwargs):
 def download_file(url, file_path):
     r = requests.get(url, stream=True)
     total_size = int(r.headers.get('content-length'))
+    if os.path.isfile(file_path) and os.path.getsize(file_path) == total_size:
+        print("File was already downloaded")
+        return
     try:
         with open(file_path, 'wb', buffering=16*1024*1024) as f:
             bar = tqdm_notebook_failsafe(total=total_size, unit='B', unit_scale=True)
