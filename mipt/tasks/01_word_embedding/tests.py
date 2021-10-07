@@ -99,7 +99,7 @@ class TaskTests:
         lengths = np.random.choice(TaskTests.MAX_LENGTH, size=TaskTests.BATCH_SIZE)
         trigrams = np.random.choice(model.num_embeddings, size=lengths.sum())
 
-        offsets = torch.tensor([0] + lengths.tolist()[:-1], dtype=torch.long)
+        offsets = torch.tensor([0] + lengths.tolist()[:-1], dtype=torch.long).cumsum(0)
         trigrams = torch.tensor(trigrams, dtype=torch.long)
     
         embeddings = model(trigrams, offsets)
